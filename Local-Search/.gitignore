@@ -1,0 +1,16 @@
+*build
+*results
+*.cache
+.DS_Store
+*/.DS_Store
+.vscode/
+main
+*verification
+nohup.out
+test_maker
+test
+Note.txt
+nohup.out
+data-analysis/__pycache__
+data-analysis/.ipynb_checkpoints
+*graphs
