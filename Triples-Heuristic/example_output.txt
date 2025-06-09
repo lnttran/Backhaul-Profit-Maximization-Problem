@@ -1,0 +1,22 @@
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+Step 1: Relax integrality
+CPLEX 22.1.2: CPLEX 22.1.2: optimal solution; objective 2.0006
+1032 simplex iterations
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+Step 2: Constrain to direct flow and profitable triples
+CPLEX 22.1.2:   lim:time = 1800
+  mip:gap = 0.01
+CPLEX 22.1.2: optimal solution within tolerance; objective 1.6153
+2520 simplex iterations
+absmipgap=0.00348, relmipgap=0.0021544
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+Step 3: Use residual capacity
+CPLEX 22.1.2: CPLEX 22.1.2: optimal solution; objective 1.6153
+486 simplex iterations
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+lower bound = 1.6153
+upper bound = 2.0006
+optimality gap = 0.192592
+elapsed time = 1.67809 (seconds)
+Path:     (1, 2) (2, 4) (4, 5) (5, 8) (8, 19) (19, 20)
+Requests: (1, 2) (2, 4) (2, 5) (4, 5) (5, 8) (8, 19) (8, 20) (19, 20)

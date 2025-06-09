@@ -1,0 +1,48 @@
+param elapsed_time default 0;
+option solver cplex;
+
+
+printf "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n";
+printf "Step 1: Constrain to direct flow and profitable triples\n";
+
+param tp {(i,j,k) in T} default 0;
+param pdf {(i,j) in A} default p*d[i,j]*w[i,j] - c*d[i,j]*(v+w[i,j]);
+for {(i,j) in A} {
+  for {k in N: (i,j,k) in T} {
+     # profit for routing delivery request (i,j) through k
+     let tp[i,j,k] := p*d[i,j]*w[i,j] - c*(d[i,k]+d[k,j])*(v+w[i,j]);
+     if w[i,j] + w[i,k] <= Q then {
+       # add additional profit from delivery request (i,k)
+       let tp[i,j,k] := tp[i,j,k] + p*d[i,k]*w[i,k] - c*d[i,k]*w[i,k];
+     }
+     if w[i,j] + w[k,j] <= Q then {
+       # add additional profit from delivery request (k,j)
+       let tp[i,j,k] := tp[i,j,k] + p*d[k,j]*w[k,j] - c*d[k,j]*w[k,j];
+     }
+  }
+}
+fix {(i,j,k) in T: tp[i,j,k] < 0} u[i,j,k] := 0;
+option presolve_eps 6.66e-14; 
+option cplex_options 'timelimit=1800 mipgap=0.01';
+solve;
+
+printf "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n";
+printf "Step 2: Fill residual capacity\n";
+fix {(i,j) in A} x[i,j] := x[i,j];
+fix {(i,j) in A: y[i,j] > 0} y[i,j] := y[i,j];
+unfix u;
+option presolve_eps 6.66e-14; 
+option cplex_options ' ';
+solve;
+let elapsed_time := _total_solve_elapsed_time + _ampl_elapsed_time;
+
+printf "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n";
+printf "elapsed time: %g (seconds)\n",elapsed_time;
+printf "Path:    ";
+printf {(k,l) in A: x[k,l] > 0} " (%d, %d)",k,l;
+printf "\n";
+printf "Requests:";
+printf {(k,l) in A: y[k,l] > 0} " (%d, %d)",k,l;
+printf "\n";
+printf "Profit: %g\n",profit;
+

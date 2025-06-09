@@ -1,0 +1,3 @@
+model BPMP.mod;
+data  t20_03_data.txt;
+commands TriplesHeuristic.txt;
